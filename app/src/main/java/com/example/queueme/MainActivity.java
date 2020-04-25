@@ -8,6 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        final Toast badRemove = Toast.makeText(getApplicationContext(), "No one to remove!", Toast.LENGTH_SHORT);
+        final Toast badPeek = Toast.makeText(getApplicationContext(), "No one to peek!", Toast.LENGTH_SHORT);
+        final Toast badEnq = Toast.makeText(getApplicationContext(), "Reached Capacity", Toast.LENGTH_SHORT);
+        final Toast badDeq = Toast.makeText(getApplicationContext(), "Not enough to Dequeue!", Toast.LENGTH_SHORT);
+
+
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -49,19 +59,25 @@ public class MainActivity extends AppCompatActivity {
 
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Join();
+                if(!(Join())){
+                    badEnq.show();
+                }
             }
         });
 
         buttonLeave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Leave();
+                if(!(Leave())){
+                    badRemove.show();
+                }
             }
         });
 
         buttonReady.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                End();
+                if(!(End())){
+                    badDeq.show();
+                }
             }
         });
 
@@ -75,17 +91,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void Join(){
+    private boolean Join(){
         int end = line.size();
         person me = new person();
-        line.enqueue(me);
+        return line.enqueue(me);
     }
-    private void Leave() {
-        line.remove(spot);
+    private boolean Leave() {
+        return line.remove(spot);
     }
-    private void End(){
+    private boolean End(){
         System.out.print("You have reached the end of the Queue!");
-        line.dequeue();//removes first person from queue
+        return line.dequeue();//removes first person from queue
     }
     private void update(){
         line = line;//get updated line data from gcloud
