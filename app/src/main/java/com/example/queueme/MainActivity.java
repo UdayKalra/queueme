@@ -187,8 +187,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         lineRef.addListenerForSingleValueEvent(valueEventListener);
+
+
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if(line.getArrList() != null){
+                    addToFirebase(line.getArrList());
+
+                }
                 update_text(textView);
             }
         });
@@ -265,12 +272,10 @@ public class MainActivity extends AppCompatActivity {
                 buttonReady.setEnabled(false);
             else
                 buttonReady.setEnabled(true);
-            if(line.getArrList() != null){
-                addToFirebase(line.getArrList());
-
-            }
             update();
             update_text(textView);
+
+
             mHandler.postDelayed(m_Runnable, 5000);
         }
 
@@ -280,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
         databaseLine.setValue(p);
     }
     public void removeFromFirebase(int position){
+        line.remove(me);
         DatabaseReference personinLine = FirebaseDatabase.getInstance().getReference("line").child(position + "");
         personinLine.removeValue();
     }
