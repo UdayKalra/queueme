@@ -118,11 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean Join(){
         int i = 0;
+
         while(listppl.get(i).position != -1) i++;
+        if(i==9){
+            return false;
+        }
         return line.enqueue(listppl.get(i));
     }
     private boolean Leave() {
-        if(line.isEmpty()) return true;
+        if(line.isEmpty()) return false;
         Random rand = new Random();
         int rand_int1 = rand.nextInt(line.size());
         System.out.println("Removing person: " + rand_int1);
