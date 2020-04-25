@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonLeave = findViewById(R.id.button7);
         final Button buttonReady = findViewById(R.id.button8);
         final Button buttonRefresh = findViewById(R.id.claimButton);
+        final EditText nameField = (EditText) findViewById(R.id.name);
+
+        //access with nameField.getText();
+
         Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
