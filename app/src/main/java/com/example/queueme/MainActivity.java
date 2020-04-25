@@ -1,5 +1,6 @@
 package com.example.queueme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -20,7 +21,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private Queue line = new Queue();//get queue from cloud
     private person me;
     private Handler mHandler;
+    DatabaseReference databaseLine;
+    List<person> lineData;
 
     public String gibName(int len){
         Random rand = new Random();
@@ -63,12 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         add_more();
         //android stuff
-        add_to_queue();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         this.mHandler = new Handler();
-
+        databaseLine = FirebaseDatabase.getInstance().getReference("line");
 
 
 
@@ -126,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     badEnq.show();
                 }
                 mHandler.postDelayed(m_Runnable,5000);
-                update();
+                addToFirebase(line.getArrList());
                 update_text(textView);
 
             }
@@ -156,7 +166,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference lineRef = rootRef.child("line");
+        final ArrayList<person> lineP = new ArrayList<person>();
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    String n = ds.child("name").getValue(String.class);
+                    Integer i = ds.child("position").getValue(Integer.class);
+                    person p = new person(i, n);
+                    lineP.add(p);
+                }
+                line.setArr(lineP);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        lineRef.addListenerForSingleValueEvent(valueEventListener);
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 update_text(textView);
@@ -178,6 +208,14 @@ public class MainActivity extends AppCompatActivity {
         //if(i == listppl.size() - 1){
         //    add_more();
         //}
+        /*
+        if(line.enqueue(me)){
+            update();
+            String id = databaseLine.push().getKey();
+            me.setId(id);
+            databaseLine.child(id).setValue(me);
+            return true;
+        }*/
         return line.enqueue(me);
     }
     private boolean Leave() {
@@ -185,11 +223,17 @@ public class MainActivity extends AppCompatActivity {
         //Random rand = new Random();
         //int rand_int1 = rand.nextInt(line.size());
         System.out.println("Removing person: " + me.getName());
-        return line.remove(me);
+        //DatabaseReference person = FirebaseDatabase.getInstance().getReference("line").child(me.getId());
+        //person.removeValue();
+        if(me != null){
+            removeFromFirebase(me.getPosition());
+        }
+        return true;
     }
     private boolean End(){
         return line.dequeue();//removes first person from queue
     }
+
     private int update(){
         List<String> listnames = new ArrayList<String>();
         for(int i = 0; i < listppl.size(); i++){
@@ -202,9 +246,9 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Queue Size:" + line.size());
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
+        me.setPosition(line.spot(me));
         return line.spot(me);
     }
-
 
     private final Runnable m_Runnable = new Runnable()
     {
@@ -226,7 +270,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };//runnable
-
+    public void addToFirebase(ArrayList<person> p){
+        update();
+        databaseLine.setValue(p);
+    }
+    public void removeFromFirebase(int position){
+        DatabaseReference personinLine = FirebaseDatabase.getInstance().getReference("line").child(position + "");
+        personinLine.removeValue();
+    }
 
     @Override
     protected void onPause() {

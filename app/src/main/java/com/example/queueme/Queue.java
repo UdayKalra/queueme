@@ -64,4 +64,10 @@ class Queue
     public Boolean isEmpty() {
         return (size() == 0);
     }
+    public ArrayList<person> getArrList(){
+        return arr;
+    }
+    public void setArr(ArrayList<person> p){
+        arr = p;
+    }
 }
