@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Queue line = new Queue();//get queue from cloud
     private person me;
+    private Handler mHandler;
+
     public String gibName(int len){
         Random rand = new Random();
         String name = "";
@@ -55,11 +58,21 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         add_more();
         //android stuff
         add_to_queue();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.mHandler = new Handler();
+
+
+
+
+
         Toolbar uToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(uToolbar);
         final Button buttonEnter = findViewById(R.id.enter);
@@ -67,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonReady = findViewById(R.id.button8);
         final Button buttonRefresh = findViewById(R.id.claimButton);
         final EditText nameField = (EditText) findViewById(R.id.name);
+
+        buttonReady.setEnabled(false);
+
 
         //access with nameField.getText();
         //creating person
@@ -109,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!(Join())){
                     badEnq.show();
                 }
+                mHandler.postDelayed(m_Runnable,5000);
                 update();
                 update_text(textView);
 
@@ -186,5 +203,36 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
         return line.spot(me);
+    }
+
+
+    private final Runnable m_Runnable = new Runnable()
+    {
+        public void run()
+
+        {
+            final Button buttonReady = findViewById(R.id.button8);
+            final TextView textView = (TextView) findViewById(R.id.spot);
+
+
+            if(update() != 0)
+                buttonReady.setEnabled(false);
+            else
+                buttonReady.setEnabled(true);
+
+            update();
+            update_text(textView);
+            mHandler.postDelayed(m_Runnable, 5000);
+        }
+
+    };//runnable
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(m_Runnable);
+        finish();
+
     }
 }
