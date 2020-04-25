@@ -25,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
 
     private Queue line = new Queue();//get queue from cloud
-
+    private person me;
     public String gibName(int len){
         Random rand = new Random();
         String name = "";
@@ -46,10 +46,18 @@ public class MainActivity extends AppCompatActivity {
             listppl.add(new_guy());
         }
     }
+    private void add_to_queue(){
+        //Random rand = new Random();
+        //int rand_int1 = rand.nextInt(line.size());
+        for(int i = 0; i < 5; i++){
+            line.enqueue(listppl.get(i));
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         add_more();
         //android stuff
+        add_to_queue();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar uToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -61,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText nameField = (EditText) findViewById(R.id.name);
 
         //access with nameField.getText();
+        //creating person
+        //done creating person
         Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -72,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         final Toast badRemove = Toast.makeText(getApplicationContext(), "No one to remove!", Toast.LENGTH_SHORT);
         final Toast badPeek = Toast.makeText(getApplicationContext(), "No one to peek!", Toast.LENGTH_SHORT);
-        final Toast badEnq = Toast.makeText(getApplicationContext(), "Reached Capacity", Toast.LENGTH_SHORT);
-        final Toast badDeq = Toast.makeText(getApplicationContext(), "Not enough to Dequeue!", Toast.LENGTH_SHORT);
+        final Toast badEnq = Toast.makeText(getApplicationContext(), "You are already on the Queue", Toast.LENGTH_SHORT);
+        final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
+        final Toast badSpot = Toast.makeText(getApplicationContext(), "You are not on the queue!", Toast.LENGTH_SHORT);
 
         final TextView textView = (TextView) findViewById(R.id.spot);
 
@@ -92,10 +103,15 @@ public class MainActivity extends AppCompatActivity {
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             //entering the queue
             public void onClick(View v) {
+                if(me == null) {
+                    me = new person(-1, nameField.getText().toString() + gibName(5));
+                }
                 if(!(Join())){
                     badEnq.show();
                 }
                 update();
+                update_text(textView);
+
             }
         });
 
@@ -106,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
                     badRemove.show();
                 }
                 update();
+                me.setPosition(-1);
+                update_text(textView);
+
             }
         });
 
@@ -116,35 +135,40 @@ public class MainActivity extends AppCompatActivity {
                     badDeq.show();
                 }
                 update();
+                update_text(textView);
+
             }
         });
 
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                textView.setText("You are currently position "+ (update() + 1) +" in line.");
+                update_text(textView);
             }
         });
         //final EditText nameField = (EditText) findViewById(R.id.name);
 
         //access with nameField.getText();
     }
+    private void update_text(TextView tview){
+        int pos = update();
+        if(pos >= 0) tview.setText("You are currently position "+ (pos + 1) +" in line.");
+        else tview.setText("You are currently not in line.");
 
+    }
     private boolean Join(){
         int i = 0;
-
-        while(listppl.get(i).getPosition() != -1) i++;
-        if(i == listppl.size() - 1){
-            add_more();
-        }
-        return line.enqueue(listppl.get(i));
+        //while(listppl.get(i).getPosition() != -1) i++;
+        //if(i == listppl.size() - 1){
+        //    add_more();
+        //}
+        return line.enqueue(me);
     }
     private boolean Leave() {
         if(line.isEmpty()) return false;
-        Random rand = new Random();
-        int rand_int1 = rand.nextInt(line.size());
-        System.out.println("Removing person: " + rand_int1);
-        String name = "" + (char)(rand_int1);
-        return line.remove(rand_int1);
+        //Random rand = new Random();
+        //int rand_int1 = rand.nextInt(line.size());
+        System.out.println("Removing person: " + me.getName());
+        return line.remove(me);
     }
     private boolean End(){
         return line.dequeue();//removes first person from queue
@@ -155,16 +179,12 @@ public class MainActivity extends AppCompatActivity {
             listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
             listnames.add(listppl.get(i).getName());
         }
-        Random rand = new Random();
         //spot can also have a toast
         System.out.println("People:" + listnames);
+        System.out.println("My Name:" + me.getName());
         System.out.println("Queue Size:" + line.size());
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
-        int rand_int2 = 0;
-        if(line.size() > 0)
-            rand_int2 = rand.nextInt(line.size());
-
-        return rand_int2;
+        return line.spot(me);
     }
 }
