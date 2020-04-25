@@ -38,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
     private person new_guy(){
         return new person(-1, gibName(5));
     }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private int max_list = 10;
+    private void add_more(){
         //my stuff
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < max_list; i++){
             listppl.add(new_guy());
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        add_more();
         //android stuff
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -120,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
 
         while(listppl.get(i).position != -1) i++;
-        if(i==9){
-            return false;
+        if(i == listppl.size() - 1){
+            add_more();
         }
         return line.enqueue(listppl.get(i));
     }
