@@ -5,12 +5,18 @@ public class person {
         position = s;
         name = n;
     }
-    Integer position;
-    String name;
+    private Integer position;
+    private String name;
     public String getName(){
         return name;
     }
     public Integer getPosition(){
         return position;
+    }
+    public void setPosition(Integer p){
+        position = p;
+    }
+    public void setName(String s){
+        name = s;
     }
 }

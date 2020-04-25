@@ -24,8 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Queue line = new Queue(100);//get queue from cloud
-    private int spot = -1;//get from cloud
+    private Queue line = new Queue();//get queue from cloud
 
     public String gibName(int len){
         Random rand = new Random();
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText nameField = (EditText) findViewById(R.id.name);
 
         //access with nameField.getText();
-
         Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -79,10 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView textView = (TextView) findViewById(R.id.spot);
 
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,
-            int pos, long id) {
+                                       int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
                 // parent.getItemAtPosition(pos)
             }
@@ -124,15 +121,18 @@ public class MainActivity extends AppCompatActivity {
 
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                textView.setText("You are currently position "+ (update()+1) +" in line.");
+                textView.setText("You are currently position "+ (update() + 1) +" in line.");
             }
         });
+        //final EditText nameField = (EditText) findViewById(R.id.name);
+
+        //access with nameField.getText();
     }
 
     private boolean Join(){
         int i = 0;
 
-        while(listppl.get(i).position != -1) i++;
+        while(listppl.get(i).getPosition() != -1) i++;
         if(i == listppl.size() - 1){
             add_more();
         }
@@ -152,17 +152,19 @@ public class MainActivity extends AppCompatActivity {
     private int update(){
         List<String> listnames = new ArrayList<String>();
         for(int i = 0; i < listppl.size(); i++){
-            listppl.get(i).position = line.spot(listppl.get(i));//get updated spot data from gcloud
+            listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
             listnames.add(listppl.get(i).getName());
         }
         Random rand = new Random();
-        int rand_int2 = rand.nextInt(line.size());
-
         //spot can also have a toast
         System.out.println("People:" + listnames);
         System.out.println("Queue Size:" + line.size());
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
+        int rand_int2 = 0;
+        if(line.size() > 0)
+            rand_int2 = rand.nextInt(line.size());
+
         return rand_int2;
     }
 }
