@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">queueme</string>
+    <string name="app_name">QueueMe!</string>
     <string name="bad_remove">nobody to remove</string>
 
     <string-array name="store_array">
