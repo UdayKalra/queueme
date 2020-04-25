@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int update(){
+
         List<String> listnames = new ArrayList<String>();
         for(int i = 0; i < listppl.size(); i++){
             listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
         me.setPosition(line.spot(me));
+        addToFirebase(line.getArrList());
         return line.spot(me);
     }
 
