@@ -94,19 +94,18 @@
 
     <TextView
         android:id="@+id/spot"
-        android:layout_width="346dp"
-        android:layout_height="48dp"
+        android:layout_width="341dp"
+        android:layout_height="50dp"
         android:layout_marginTop="368dp"
         android:layout_marginBottom="315dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="You are currently Xth in line."
-        android:textSize="30sp"
+        android:text="You are currently position 1 in line."
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/button8"

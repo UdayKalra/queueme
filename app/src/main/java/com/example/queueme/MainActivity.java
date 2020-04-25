@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         final Toast badEnq = Toast.makeText(getApplicationContext(), "Reached Capacity", Toast.LENGTH_SHORT);
         final Toast badDeq = Toast.makeText(getApplicationContext(), "Not enough to Dequeue!", Toast.LENGTH_SHORT);
 
+        final TextView textView = (TextView) findViewById(R.id.spot);
+
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,
             int pos, long id) {
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                update();
+                textView.setText("You are currently position "+ (update()+1) +" in line.");
             }
         });
     }
@@ -140,16 +144,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean End(){
         return line.dequeue();//removes first person from queue
     }
-    private void update(){
+    private int update(){
         List<String> listnames = new ArrayList<String>();
         for(int i = 0; i < listppl.size(); i++){
             listppl.get(i).position = line.spot(listppl.get(i));//get updated spot data from gcloud
             listnames.add(listppl.get(i).getName());
         }
+        Random rand = new Random();
+        int rand_int2 = rand.nextInt(line.size());
+
         //spot can also have a toast
         System.out.println("People:" + listnames);
         System.out.println("Queue Size:" + line.size());
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
+        return rand_int2;
     }
 }
