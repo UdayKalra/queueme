@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Queue:" + line.print());
         line = line;//get updated line data from gcloud
         me.setPosition(line.spot(me));
-        addToFirebase(line.getArrList());
+
         return line.spot(me);
     }
 
@@ -265,7 +265,10 @@ public class MainActivity extends AppCompatActivity {
                 buttonReady.setEnabled(false);
             else
                 buttonReady.setEnabled(true);
+            if(line.getArrList() != null){
+                addToFirebase(line.getArrList());
 
+            }
             update();
             update_text(textView);
             mHandler.postDelayed(m_Runnable, 5000);
