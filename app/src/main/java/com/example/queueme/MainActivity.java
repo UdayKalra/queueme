@@ -1,6 +1,8 @@
 package com.example.queueme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.LinkedList;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar uToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(uToolbar);
         final Button buttonEnter = findViewById(R.id.enter);
         final Button buttonLeave = findViewById(R.id.button7);
         final Button buttonReady = findViewById(R.id.button8);

@@ -84,7 +84,7 @@
         android:id="@+id/textView3"
         android:layout_width="246dp"
         android:layout_height="38dp"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="88dp"
         android:layout_marginBottom="528dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Currently Not In Queue"
@@ -126,5 +126,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blueBoi"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
