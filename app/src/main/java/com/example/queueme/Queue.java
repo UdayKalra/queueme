@@ -14,7 +14,7 @@ class Queue
     Queue(int size) {
         arr = new person[size];
         capacity = size;
-        front = new person();//get from gcloud
+        front = new person(0, "joe");//get from gcloud
         count = 0;
     }
 
@@ -26,11 +26,17 @@ class Queue
             //System.exit(1);
             return false;
         }
-        front = arr[1];
-        count--;
+        shift(0);//next guy
+        front = arr[0];
         return true;
     }
-
+    public String print(){
+        String ret = "";
+        for(int i = 0; i < size(); i++){
+            ret += arr[i].name + ", ";
+        }
+        return ret;
+    }
     // Utility function to add an item to the queue
     public boolean enqueue(person item) {//can modify to have any size
         // check for queue overflow
@@ -43,14 +49,35 @@ class Queue
         count++;
         return true;
     }
-    public boolean remove(int indx) {
-        //check if valid
-        if(indx < 0 || indx > count) {
-            System.out.println("nobody to remove");
-            //System.exit(1);
-            return false;
+    private void shift(int posn){
+        for(int i = posn; i < size() - 1; i++){
+            arr[i] = arr[i+1];
+            arr[i].position = i;//update spots
         }
+        count--;
+    }
+    public boolean remove(person rem) {
+        for(int i = 0; i < size(); i++){
+            if(arr[i].name.equals(rem.name)){
+                //found person in queue
+                shift(arr[i].position);//shifts everyone behind
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean remove(int indx) {
+        //add safety check
+        shift(arr[indx].position);//shifts everyone behind
         return true;
+    }
+    public int spot(person m){
+        for(int i = 0; i < size(); i++){
+            if(arr[i].name.equals(m.name)){
+                return i;
+            }
+        }
+        return -1;//not found
     }
     // Utility function to return front element in the queue
     public person peek()
