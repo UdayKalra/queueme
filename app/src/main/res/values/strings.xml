@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">queueme</string>
+
+    <string-array name="store_array">
+        <item>Rest Buy</item>
+        <item>Darget</item>
+        <item>Talmart</item>
+        <item>FameStop</item>
+        <item>Bapple</item>
+    </string-array>
 </resources>
