@@ -11,7 +11,11 @@ class Queue
     Queue() {
         arr = new ArrayList<person>();
     }
-
+    private void update_spots(){
+        for(int i = 0; i < arr.size(); i++){
+            arr.get(i).setPosition(i);
+        }
+    }
     // Utility function to remove front element from the queue
     public boolean dequeue() {
         // check for queue underflow
@@ -21,6 +25,7 @@ class Queue
             return false;
         }
         shift(0);//next guy
+        update_spots();
         return true;
     }
     public String print(){
@@ -35,20 +40,24 @@ class Queue
         //check if alr added
         if(arr.contains(item)) return false;
         arr.add(item);
+        update_spots();
         return true;
     }
     private void shift(int posn){
         arr.remove(posn);
+        update_spots();
     }
     public boolean remove(person rem) {
         int i = arr.indexOf(rem);
         if(i == -1) return false;
         shift(i);
+        update_spots();
         return true;
     }
     public boolean remove(int indx) {
         //add safety check
         shift(arr.get(indx).getPosition());//shifts everyone behind
+        update_spots();
         return true;
     }
     public int spot(person m){
