@@ -10,97 +10,107 @@
         android:id="@+id/storeText"
         android:layout_width="175dp"
         android:layout_height="46dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginTop="136dp"
         android:text="Select Store:"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/enter"
         app:layout_constraintEnd_toStartOf="@+id/storeDropDown"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/storeDropDown"
         android:layout_width="204dp"
         android:layout_height="44dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="136dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/titleText"
         android:layout_width="219dp"
         android:layout_height="75dp"
+        android:layout_marginTop="39dp"
+        android:layout_marginBottom="617dp"
         android:text="QueueMe!"
         android:textSize="48sp"
-        app:layout_constraintBottom_toTopOf="@+id/storeText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/claimButton"
         android:layout_width="165dp"
         android:layout_height="82dp"
+        android:layout_marginBottom="76dp"
         android:text="Refresh Queue!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button8"
-        app:layout_constraintVertical_bias="0.213" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginBottom="528dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="111dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginBottom="408dp"
+
+        android:background="#DEC130"
+
         android:text="Enter Queue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/button7"
         android:layout_width="117dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="132dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="408dp"
         android:text="Leave Queue"
-        app:layout_constraintBottom_toTopOf="@+id/button8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enter" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="246dp"
         android:layout_height="38dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="468dp"
         android:text="Currently Not In Queue"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storeText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/spot"
         android:layout_width="380dp"
         android:layout_height="48dp"
+        android:layout_marginTop="368dp"
+        android:layout_marginBottom="315dp"
         android:text="You are currently Xth in line."
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button7" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/button8"
         android:layout_width="190dp"
         android:layout_height="74dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="454dp"
+        android:layout_marginBottom="203dp"
         android:text="I'm Here!"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
