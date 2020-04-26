@@ -51,7 +51,7 @@ class Queue
         update_spots();
     }
     public boolean remove(person rem) {
-        int i = arr.indexOf(rem);
+        int i = spot(rem);
         if(i == -1) return false;
         shift(i);
         update_spots();
@@ -64,7 +64,11 @@ class Queue
         return true;
     }
     public int spot(person m){
-        return arr.indexOf(m);
+        for(int i = 0; i< arr.size(); i++){
+            if(arr.get(i).getName().equals(m.getName()))
+                return i;
+        }
+        return -1;
     }
 
     // Utility function to return the size of the queue
