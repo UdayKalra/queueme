@@ -62,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonRefresh = findViewById(R.id.claimButton);
         final EditText nameField = (EditText) findViewById(R.id.name);
         //starts timer
-        new CountDownTimer(50000,1000) {
+        new CountDownTimer(max_time*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 if(counter < 0) counter = max_time;
                 counter--;
-                if(counter == 0){
+                if(counter <= 0){
                     End();
                     Leave();
                     if(line.getArrList() != null){
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFinish() { }
+            public void onFinish() { start(); }
         }.start();
         //end timer
         buttonReady.setEnabled(false);
@@ -97,7 +97,16 @@ public class MainActivity extends AppCompatActivity {
         final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
         textView = (TextView) findViewById(R.id.spot);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { }
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if(me == null){
+                    me = new person(-1, nameField.getText().toString() + "::" + gibName(50), spinner.getSelectedItem().toString());
+                }
+                else {
+                    String m = me.getName();
+                    Integer p = me.getPosition();
+                    me = new person(p, m, spinner.getSelectedItem().toString());
+                }
+            }
             public void onNothingSelected(AdapterView<?> parent) { } // Another interface callback
         });
         buttonEnter.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!(Join())){
                     badEnq.show();
                 }
-                mHandler.postDelayed(m_Runnable,1000);
+                mHandler.postDelayed(m_Runnable,2000);
                 addToFirebase(line.getArrList());
                 update_text();
             }
@@ -202,14 +211,15 @@ public class MainActivity extends AppCompatActivity {
             // System.out.println("My Name:" + me.getName());
             // System.out.println("Queue Size:" + line.size());
             // System.out.println("Queue:" + line.print());
-            //update_text();
+            // update_text();
 
             me.setPosition(line.spot(me));
             int pos = line.spot(me);
             if(pos == 0){
                 if(!ready) counter = max_time;
+                Toast n = Toast.makeText(getApplicationContext(), "You are in front! accept in <" + counter + "s", Toast.LENGTH_SHORT);
                 ready = true;
-                if(counter % 5 == 0) Toast.makeText(getApplicationContext(), "You are in front! accept in " + counter + "s", Toast.LENGTH_SHORT).show();
+                if(counter % 5 == 0) n.show();
             }
             return pos;
         }
@@ -224,7 +234,9 @@ public class MainActivity extends AppCompatActivity {
             else
                 buttonReady.setEnabled(true);
             update_text();
-            mHandler.postDelayed(m_Runnable, 1000 * (line.spot(me) + 1));
+            int refresh = 1000 * (line.spot(me) + 1);
+            if(refresh < 1000) refresh = 1000;
+            mHandler.postDelayed(m_Runnable, refresh);
         }
     };//runnable
 
