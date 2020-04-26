@@ -1,6 +1,7 @@
 package com.example.queueme;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -171,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<person> lineP = new ArrayList<person>();
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                lineP.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     String n = ds.child("name").getValue(String.class);
                     Integer i = ds.child("position").getValue(Integer.class);
@@ -270,12 +273,11 @@ public class MainActivity extends AppCompatActivity {
             final Button buttonReady = findViewById(R.id.button8);
             final TextView textView = (TextView) findViewById(R.id.spot);
 
-
+            /**
             if(update() != 0)
                 buttonReady.setEnabled(false);
             else
-                buttonReady.setEnabled(true);
-            update();
+                buttonReady.setEnabled(true);*/
             update_text(textView);
 
 
@@ -284,13 +286,13 @@ public class MainActivity extends AppCompatActivity {
 
     };//runnable
     public void addToFirebase(ArrayList<person> p){
-        update();
         databaseLine.setValue(p);
     }
     public void removeFromFirebase(int position){
         line.remove(me);
         DatabaseReference personinLine = FirebaseDatabase.getInstance().getReference("line").child(position + "");
         personinLine.removeValue();
+        me = null;
     }
 
     @Override
