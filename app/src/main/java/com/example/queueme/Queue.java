@@ -38,7 +38,10 @@ class Queue
     // Utility function to add an item to the queue
     public boolean enqueue(person item) {//can modify to have any size
         //check if alr added
-        if(arr.contains(item)) return false;
+        for(int i = 0; i< arr.size(); i++){
+            if(arr.get(i).getName().equals(item.getName()))
+                return false;
+        }
         arr.add(item);
         update_spots();
         return true;
