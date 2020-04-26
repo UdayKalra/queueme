@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Random r = new Random();
                 if(me == null) {
-                    me = new person(-1, nameField.getText().toString() + "::" + gibName(5), spinner.getSelectedItem().toString());
+                    me = new person(-1, nameField.getText().toString() + "::" + gibName(50), spinner.getSelectedItem().toString());
                 }
                 if(!(Join())){
                     badEnq.show();
