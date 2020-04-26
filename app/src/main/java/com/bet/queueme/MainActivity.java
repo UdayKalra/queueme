@@ -1,20 +1,17 @@
-package com.example.queueme;
+package com.bet.queueme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.provider.Settings.Secure;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;

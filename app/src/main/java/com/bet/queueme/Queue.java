@@ -1,4 +1,4 @@
-package com.example.queueme;
+package com.bet.queueme;
 
 import java.util.*;
 

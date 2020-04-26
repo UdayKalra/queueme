@@ -6,7 +6,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.queueme"
+        applicationId "com.queue.queueme"
         minSdkVersion 27
         targetSdkVersion 29
         versionCode 1

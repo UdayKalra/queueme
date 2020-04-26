@@ -1,4 +1,4 @@
-package com.example.queueme;
+package com.bet.queueme;
 
 public class person {
     public person(Integer s, String n, String ss){
