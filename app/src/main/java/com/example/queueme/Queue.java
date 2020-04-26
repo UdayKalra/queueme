@@ -37,6 +37,8 @@ class Queue
     }
     // Utility function to add an item to the queue
     public boolean enqueue(person item) {//can modify to have any size
+        //null check
+        if(item == null) return false;
         //check if alr added
         for(int i = 0; i< arr.size(); i++){
             if(arr.get(i).getName().equals(item.getName()))
@@ -47,23 +49,23 @@ class Queue
         return true;
     }
     private void shift(int posn){
-        arr.remove(posn);
-        update_spots();
+        if(posn >= 0 && posn < size()) {
+            arr.remove(posn);
+            update_spots();
+        }
     }
     public boolean remove(person rem) {
+        //null check
+        if(rem == null) return false;
         int i = spot(rem);
         if(i == -1) return false;
         shift(i);
         update_spots();
         return true;
     }
-    public boolean remove(int indx) {
-        //add safety check
-        shift(arr.get(indx).getPosition());//shifts everyone behind
-        update_spots();
-        return true;
-    }
     public int spot(person m){
+        //null check
+        if(m == null) return -1;
         for(int i = 0; i< arr.size(); i++){
             if(arr.get(i).getName().equals(m.getName()))
                 return i;

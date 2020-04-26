@@ -1,16 +1,10 @@
 package com.example.queueme;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -21,16 +15,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -42,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseLine;
     List<person> lineData;
 
-    public String gibName(int len){
+    private String gibName(int len){
         Random rand = new Random();
         String name = "";
         for(int i = 0; i < len; i++){
@@ -51,40 +39,12 @@ public class MainActivity extends AppCompatActivity {
         }
         return name;
     }
-    List<person> listppl = new ArrayList<person>();
-    private person new_guy(){
-        return new person(-1, gibName(5));
-    }
-    private int max_list = 10;
-    private void add_more(){
-        //my stuff
-        for(int i = 0; i < max_list; i++){
-            listppl.add(new_guy());
-        }
-    }
-    private void add_to_queue(){
-        //Random rand = new Random();
-        //int rand_int1 = rand.nextInt(line.size());
-        for(int i = 0; i < 5; i++){
-            line.enqueue(listppl.get(i));
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-        add_more();
-        //android stuff
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.mHandler = new Handler();
         databaseLine = FirebaseDatabase.getInstance().getReference("line");
-
-
-
-
         Toolbar uToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(uToolbar);
         final Button buttonEnter = findViewById(R.id.enter);
@@ -94,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText nameField = (EditText) findViewById(R.id.name);
 
         buttonReady.setEnabled(false);
-
-
-        //access with nameField.getText();
-        //creating person
         //done creating person
         Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -108,14 +64,10 @@ public class MainActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        final Toast badRemove = Toast.makeText(getApplicationContext(), "No one to remove!", Toast.LENGTH_SHORT);
-        final Toast badPeek = Toast.makeText(getApplicationContext(), "No one to peek!", Toast.LENGTH_SHORT);
-        final Toast badEnq = Toast.makeText(getApplicationContext(), "You are already on the Queue", Toast.LENGTH_SHORT);
+        final Toast badRemove = Toast.makeText(getApplicationContext(), "You have already left the queue!", Toast.LENGTH_SHORT);
+        final Toast badEnq = Toast.makeText(getApplicationContext(), "You are already on the queue", Toast.LENGTH_SHORT);
         final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
-        final Toast badSpot = Toast.makeText(getApplicationContext(), "You are not on the queue!", Toast.LENGTH_SHORT);
-
         final TextView textView = (TextView) findViewById(R.id.spot);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
@@ -132,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             //entering the queue
             public void onClick(View v) {
                 if(me == null) {
-                    me = new person(-1, nameField.getText().toString() + gibName(5));
+                    me = new person(-1, nameField.getText().toString() + gibName(15));
                 }
                 if(!(Join())){
                     badEnq.show();
@@ -140,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 mHandler.postDelayed(m_Runnable,5000);
                 addToFirebase(line.getArrList());
                 update_text(textView);
-
             }
         });
 
@@ -151,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     badRemove.show();
                 }
                 update();
-                //me.setPosition(-1);
                 update_text(textView);
-
             }
         });
 
@@ -163,15 +112,12 @@ public class MainActivity extends AppCompatActivity {
                 if(!(End())){
                     badDeq.show();
                 }
-
                 Leave();
                 if(line.getArrList() != null){
                     addToFirebase(line.getArrList());
-
                 }
                 update();
                 update_text(textView);
-
             }
         });
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -189,63 +135,33 @@ public class MainActivity extends AppCompatActivity {
                 }
                 line.setArr(lineP);
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
         lineRef.addValueEventListener(valueEventListener);
 
-
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 if(line.getArrList() != null){
                     addToFirebase(line.getArrList());
-
                 }
                 update_text(textView);
             }
         });
-        //final EditText nameField = (EditText) findViewById(R.id.name);
-
-        //access with nameField.getText();
     }
     private void update_text(TextView tview){
         int pos = update();
         if(pos >= 0) tview.setText("You are currently position "+ (pos + 1) +" in line.");
         else tview.setText("You are currently not in line.");
-
     }
     private boolean Join(){
-        int i = 0;
-        //while(listppl.get(i).getPosition() != -1) i++;
-        //if(i == listppl.size() - 1){
-        //    add_more();
-        //}
-        /*
-        if(line.enqueue(me)){
-            update();
-            String id = databaseLine.push().getKey();
-            me.setId(id);
-            databaseLine.child(id).setValue(me);
-            return true;
-        }*/
         return line.enqueue(me);
     }
     private boolean Leave() {
-        if(line.isEmpty()) return false;
-        //Random rand = new Random();
-        //int rand_int1 = rand.nextInt(line.size());
-        //DatabaseReference person = FirebaseDatabase.getInstance().getReference("line").child(me.getId());
-        //person.removeValue();
-
+        if(line.isEmpty() || me == null) return false;
         if(me != null){
-
             removeFromFirebase(me.getPosition());
         }
-
         return true;
     }
     private boolean End(){
@@ -254,46 +170,28 @@ public class MainActivity extends AppCompatActivity {
 
     private int update(){
         if(me != null) {
-
-
-            List<String> listnames = new ArrayList<String>();
-            for (int i = 0; i < listppl.size(); i++) {
-                listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
-                listnames.add(listppl.get(i).getName());
-            }
-            //spot can also have a toast
-            System.out.println("People:" + listnames);
-            System.out.println("My Name:" + me.getName());
-            System.out.println("Queue Size:" + line.size());
-            System.out.println("Queue:" + line.print());
-            line = line;//get updated line data from gcloud
+            // System.out.println("My Name:" + me.getName());
+            // System.out.println("Queue Size:" + line.size());
+            // System.out.println("Queue:" + line.print());
             me.setPosition(line.spot(me));
-
             return line.spot(me);
         }
         return -1;
     }
 
-    private final Runnable m_Runnable = new Runnable()
-    {
-        public void run()
-
-        {
+    private final Runnable m_Runnable = new Runnable() {
+        public void run() {
             final Button buttonReady = findViewById(R.id.button8);
             final TextView textView = (TextView) findViewById(R.id.spot);
-
-
             if(update() != 0)
                 buttonReady.setEnabled(false);
             else
                 buttonReady.setEnabled(true);
             update_text(textView);
-
-
             mHandler.postDelayed(m_Runnable, 5000);
         }
-
     };//runnable
+
     public void addToFirebase(ArrayList<person> p){
         databaseLine.setValue(p);
     }
