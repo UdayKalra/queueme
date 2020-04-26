@@ -273,11 +273,11 @@ public class MainActivity extends AppCompatActivity {
             final Button buttonReady = findViewById(R.id.button8);
             final TextView textView = (TextView) findViewById(R.id.spot);
 
-            /**
+
             if(update() != 0)
                 buttonReady.setEnabled(false);
             else
-                buttonReady.setEnabled(true);*/
+                buttonReady.setEnabled(true);
             update_text(textView);
 
 
