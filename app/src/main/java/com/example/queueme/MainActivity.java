@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     badRemove.show();
                 }
                 update();
-                me.setPosition(-1);
+                //me.setPosition(-1);
                 update_text(textView);
 
             }
@@ -232,13 +232,14 @@ public class MainActivity extends AppCompatActivity {
         if(line.isEmpty()) return false;
         //Random rand = new Random();
         //int rand_int1 = rand.nextInt(line.size());
-        System.out.println("Removing person: " + me.getName());
         //DatabaseReference person = FirebaseDatabase.getInstance().getReference("line").child(me.getId());
         //person.removeValue();
+
         if(me != null){
             
             removeFromFirebase(me.getPosition());
         }
+
         return true;
     }
     private boolean End(){
@@ -246,23 +247,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int update(){
+        if(me != null) {
 
 
+            List<String> listnames = new ArrayList<String>();
+            for (int i = 0; i < listppl.size(); i++) {
+                listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
+                listnames.add(listppl.get(i).getName());
+            }
+            //spot can also have a toast
+            System.out.println("People:" + listnames);
+            System.out.println("My Name:" + me.getName());
+            System.out.println("Queue Size:" + line.size());
+            System.out.println("Queue:" + line.print());
+            line = line;//get updated line data from gcloud
+            me.setPosition(line.spot(me));
 
-        List<String> listnames = new ArrayList<String>();
-        for(int i = 0; i < listppl.size(); i++){
-            listppl.get(i).setPosition(line.spot(listppl.get(i)));//get updated spot data from gcloud
-            listnames.add(listppl.get(i).getName());
+            return line.spot(me);
         }
-        //spot can also have a toast
-        System.out.println("People:" + listnames);
-        System.out.println("My Name:" + me.getName());
-        System.out.println("Queue Size:" + line.size());
-        System.out.println("Queue:" + line.print());
-        line = line;//get updated line data from gcloud
-        me.setPosition(line.spot(me));
-
-        return line.spot(me);
+        return -1;
     }
 
     private final Runnable m_Runnable = new Runnable()
