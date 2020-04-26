@@ -163,6 +163,12 @@ public class MainActivity extends AppCompatActivity {
                 if(!(End())){
                     badDeq.show();
                 }
+
+                Leave();
+                if(line.getArrList() != null){
+                    addToFirebase(line.getArrList());
+
+                }
                 update();
                 update_text(textView);
 
@@ -236,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         //person.removeValue();
 
         if(me != null){
-            
+
             removeFromFirebase(me.getPosition());
         }
 
