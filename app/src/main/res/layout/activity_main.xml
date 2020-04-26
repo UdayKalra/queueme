@@ -109,7 +109,7 @@
         android:layout_marginTop="368dp"
         android:layout_marginBottom="315dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="You are currently position 1 in line."
+        android:text="You are currently not in line."
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
