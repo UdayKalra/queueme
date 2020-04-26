@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        lineRef.addListenerForSingleValueEvent(valueEventListener);
+        lineRef.addValueEventListener(valueEventListener);
 
 
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         //DatabaseReference person = FirebaseDatabase.getInstance().getReference("line").child(me.getId());
         //person.removeValue();
         if(me != null){
+            
             removeFromFirebase(me.getPosition());
         }
         return true;
@@ -242,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int update(){
+
+
 
         List<String> listnames = new ArrayList<String>();
         for(int i = 0; i < listppl.size(); i++){
