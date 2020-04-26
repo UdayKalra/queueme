@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 if(counter < 0) counter = max_time;
                 counter--;
-                if(counter == 0){
+                if(false){//counter == 0
                     End();
                     Leave();
                     if(line.getArrList() != null){
