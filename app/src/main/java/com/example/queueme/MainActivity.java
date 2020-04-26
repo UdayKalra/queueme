@@ -7,6 +7,8 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -23,7 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import android.content.Context;
+import android.os.CountDownTimer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return name;
     }
-    String[] stores = {"one", "two", "three"};
+    final private int max_time = 20;
+    public int counter = max_time;
+    private boolean ready = false;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +61,26 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonReady = findViewById(R.id.button8);
         final Button buttonRefresh = findViewById(R.id.claimButton);
         final EditText nameField = (EditText) findViewById(R.id.name);
-
+        //starts timer
+        new CountDownTimer(50000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if(counter < 0) counter = max_time;
+                counter--;
+                if(counter == 0){
+                    End();
+                    Leave();
+                    if(line.getArrList() != null){
+                        addToFirebase(line.getArrList());
+                    }
+                    update();
+                    update_text();
+                }
+            }
+            @Override
+            public void onFinish() { }
+        }.start();
+        //end timer
         buttonReady.setEnabled(false);
         //done creating person
         final Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
@@ -71,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
         final Toast badRemove = Toast.makeText(getApplicationContext(), "You have already left the queue!", Toast.LENGTH_SHORT);
         final Toast badEnq = Toast.makeText(getApplicationContext(), "You are already on the queue", Toast.LENGTH_SHORT);
         final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
-
-        final TextView textView = (TextView) findViewById(R.id.spot);
+        textView = (TextView) findViewById(R.id.spot);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { }
             public void onNothingSelected(AdapterView<?> parent) { } // Another interface callback
@@ -87,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
                 if(!(Join())){
                     badEnq.show();
                 }
-                mHandler.postDelayed(m_Runnable,5000);
+                mHandler.postDelayed(m_Runnable,1000);
                 addToFirebase(line.getArrList());
-                update_text(textView);
+                update_text();
             }
         });
         buttonLeave.setOnClickListener(new View.OnClickListener() {
@@ -99,14 +122,14 @@ public class MainActivity extends AppCompatActivity {
                     badRemove.show();
                 }
                 update();
-                update_text(textView);
+                update_text();
             }
         });
 
         buttonReady.setOnClickListener(new View.OnClickListener() {
             //leaving the queue
             public void onClick(View v) {
-                if(!(End())){
+                if(!End()){
                     badDeq.show();
                 }
                 Leave();
@@ -114,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     addToFirebase(line.getArrList());
                 }
                 update();
-                update_text(textView);
+                update_text();
             }
         });
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -143,14 +166,17 @@ public class MainActivity extends AppCompatActivity {
                 if(line.getArrList() != null){
                     addToFirebase(line.getArrList());
                 }
-                update_text(textView);
+                update_text();
             }
         });
     }
-    private void update_text(TextView tview){
+
+    private void update_text(){
         int pos = update();
-        if(pos >= 0) tview.setText("You are currently position "+ (pos + 1) +" in line.");
-        else tview.setText("You are currently not in line.");
+        if(pos >= 0) {
+            textView.setText("You are currently position "+ (pos + 1) +" in line");
+        }
+        else textView.setText("You are currently not in line");
     }
     private boolean Join(){
         return line.enqueue(me);
@@ -158,12 +184,17 @@ public class MainActivity extends AppCompatActivity {
     private boolean Leave() {
         if(line.isEmpty() || me == null) return false;
         if(me != null){
+            if(line.spot(me) == 0) ready = false;
             removeFromFirebase(line.indexfind(me));
         }
         return true;
     }
-    private boolean End(){
-        return line.dequeue();//removes first person from queue
+    private boolean End() {
+        if (line.dequeue()){
+            ready = false;
+            return true;//removes first person from queue
+        }
+        return false;
     }
 
     private int update(){
@@ -171,8 +202,16 @@ public class MainActivity extends AppCompatActivity {
             // System.out.println("My Name:" + me.getName());
             // System.out.println("Queue Size:" + line.size());
             // System.out.println("Queue:" + line.print());
+            //update_text();
+
             me.setPosition(line.spot(me));
-            return line.spot(me);
+            int pos = line.spot(me);
+            if(pos == 0){
+                if(!ready) counter = max_time;
+                ready = true;
+                if(counter % 5 == 0) Toast.makeText(getApplicationContext(), "You are in front! accept in " + counter + "s", Toast.LENGTH_SHORT).show();
+            }
+            return pos;
         }
         return -1;
     }
@@ -180,13 +219,12 @@ public class MainActivity extends AppCompatActivity {
     private final Runnable m_Runnable = new Runnable() {
         public void run() {
             final Button buttonReady = findViewById(R.id.button8);
-            final TextView textView = (TextView) findViewById(R.id.spot);
             if(update() != 0)
                 buttonReady.setEnabled(false);
             else
                 buttonReady.setEnabled(true);
-            update_text(textView);
-            mHandler.postDelayed(m_Runnable, 5000);
+            update_text();
+            mHandler.postDelayed(m_Runnable, 1000 * (line.spot(me) + 1));
         }
     };//runnable
 

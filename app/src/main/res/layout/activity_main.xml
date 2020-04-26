@@ -61,7 +61,7 @@
         android:layout_width="125dp"
         android:layout_height="48dp"
 
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
         android:background="@drawable/button_bg_rounded_corners"
         android:elevation="100dp"
@@ -69,7 +69,8 @@
 
         android:fontFamily="sans-serif-condensed-medium"
         android:padding="1dp"
-        android:text="Enter Queue"
+        android:text="Enter"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/spot"
         app:layout_constraintEnd_toStartOf="@+id/button7"
         app:layout_constraintStart_toStartOf="parent" />
@@ -84,23 +85,10 @@
         android:layout_marginBottom="40dp"
         android:background="@drawable/button_bg_rounded_corners_red"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Leave Queue"
+        android:text="Leave"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/spot"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="246dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginBottom="40dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Currently Not In Queue"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/spot"
@@ -111,6 +99,7 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:text="You are currently not in line."
         android:textSize="24sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +170,8 @@
         android:layout_width="173dp"
         android:layout_height="44dp"
         android:layout_marginBottom="548dp"
-        android:hint="John D."
+        android:hint="..."
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.932"
