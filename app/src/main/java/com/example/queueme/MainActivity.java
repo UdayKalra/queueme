@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.provider.Settings.Secure;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,7 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import android.content.Context;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
         final Toast badRemove = Toast.makeText(getApplicationContext(), "You have already left the queue!", Toast.LENGTH_SHORT);
         final Toast badEnq = Toast.makeText(getApplicationContext(), "You are already on the queue", Toast.LENGTH_SHORT);
         final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
+
         final TextView textView = (TextView) findViewById(R.id.spot);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { }
             public void onNothingSelected(AdapterView<?> parent) { } // Another interface callback
         });
-
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             //entering the queue
             public void onClick(View v) {
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 update_text(textView);
             }
         });
-
         buttonLeave.setOnClickListener(new View.OnClickListener() {
             //dropping from the queue
             public void onClick(View v) {
