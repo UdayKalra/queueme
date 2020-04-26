@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonReady.setEnabled(false);
         //done creating person
-        Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
+        final Spinner spinner = (Spinner) findViewById(R.id.storeDropDown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.store_array, android.R.layout.simple_spinner_item);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Random r = new Random();
                 if(me == null) {
-                    me = new person(-1, nameField.getText().toString() + "::" + gibName(5), stores[r.nextInt(3)]);
+                    me = new person(-1, nameField.getText().toString() + "::" + gibName(5), spinner.getSelectedItem().toString());
                 }
                 if(!(Join())){
                     badEnq.show();
