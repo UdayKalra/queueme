@@ -2,6 +2,8 @@ package com.example.queueme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return name;
     }
+    String[] stores = {"one", "two", "three"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             //entering the queue
             public void onClick(View v) {
+                Random r = new Random();
                 if(me == null) {
-                    me = new person(-1, nameField.getText().toString() + "::" + gibName(50));
+                    me = new person(-1, nameField.getText().toString() + "::" + gibName(5), stores[r.nextInt(3)]);
                 }
                 if(!(Join())){
                     badEnq.show();
@@ -123,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     String n = ds.child("name").getValue(String.class);
                     Integer i = ds.child("position").getValue(Integer.class);
-                    person p = new person(i, n);
+                    String s = ds.child("store").getValue(String.class);
+                    person p = new person(i, n, s);
                     lineP.add(p);
                 }
                 line.setArr(lineP);
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean Leave() {
         if(line.isEmpty() || me == null) return false;
         if(me != null){
-            removeFromFirebase(me.getPosition());
+            removeFromFirebase(line.indexfind(me));
         }
         return true;
     }

@@ -13,7 +13,7 @@ class Queue
     }
     private void update_spots(){
         for(int i = 0; i < arr.size(); i++){
-            arr.get(i).setPosition(i);
+            arr.get(i).setPosition(spot(arr.get(i)));
         }
     }
     // Utility function to remove front element from the queue
@@ -57,18 +57,27 @@ class Queue
     public boolean remove(person rem) {
         //null check
         if(rem == null) return false;
-        int i = spot(rem);
+        int i = indexfind(rem);
         if(i == -1) return false;
         shift(i);
         update_spots();
         return true;
     }
+    public int indexfind(person m){
+        for(int i = 0; i < arr.size(); i++) {
+            if (arr.get(i).getName().equals(m.getName()))
+                return i;
+        }
+        return -1;
+    }
     public int spot(person m){
         //null check
         if(m == null) return -1;
-        for(int i = 0; i< arr.size(); i++){
+        int s = 0;
+        for(int i = 0; i < arr.size(); i++){
             if(arr.get(i).getName().equals(m.getName()))
-                return i;
+                return s;
+            if(arr.get(i).getStore().equals(m.getStore())) s++;
         }
         return -1;
     }

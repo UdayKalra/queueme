@@ -1,18 +1,19 @@
 package com.example.queueme;
 
 public class person {
-    public person(Integer s, String n, String id){
+    public person(Integer s, String n, String ss){
         position = s;
         name = n;
-        this.id = id;
+        store = ss;
     }
     public person(Integer s, String n){
         position = s;
         name = n;
     }
-    private String id;
+    private String store;
     private Integer position;
     private String name;
+
     public String getName(){
         return name;
     }
@@ -25,12 +26,10 @@ public class person {
     public void setName(String s){
         name = s;
     }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setStore(String s) {
+        this.store = s;
     }
-
-    public String getId() {
-        return id;
+    public String getStore() {
+        return store;
     }
 }
