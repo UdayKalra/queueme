@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Random rand = new Random();
         String name = "";
         for(int i = 0; i < len; i++){
-            int rand_int1 = rand.nextInt(26)+65;
+            int rand_int1 = rand.nextInt(93)+33;
             name = name + (char)(rand_int1);
         }
         return name;
@@ -69,22 +69,15 @@ public class MainActivity extends AppCompatActivity {
         final Toast badDeq = Toast.makeText(getApplicationContext(), "The queue is Empty!", Toast.LENGTH_SHORT);
         final TextView textView = (TextView) findViewById(R.id.spot);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                // An item was selected. You can retrieve the selected item using
-                // parent.getItemAtPosition(pos)
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
-            }
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { }
+            public void onNothingSelected(AdapterView<?> parent) { } // Another interface callback
         });
 
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             //entering the queue
             public void onClick(View v) {
                 if(me == null) {
-                    me = new person(-1, nameField.getText().toString() + gibName(15));
+                    me = new person(-1, nameField.getText().toString() + "::" + gibName(50));
                 }
                 if(!(Join())){
                     badEnq.show();
